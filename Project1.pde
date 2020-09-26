@@ -1,4 +1,4 @@
-//"School's out"
+//"Bugs"
 //CSCI 5611 Project 1
 // Ben Schroeder
 int counter = 0;
@@ -19,6 +19,11 @@ float neighborDist = 85.0;
 Vec2 bulbPos = new Vec2(470, 180);
 float predatorDist = 40.0;
 
+float x = 100;
+float y = 100;
+float angle1 = 0.0;
+float segLength = 1;
+
 Vec2 dir[] = new Vec2[agents];//keep for new class based system
 float sepDist = 19.0;
 float maxSpeed = 20;
@@ -35,15 +40,16 @@ Vec2 orient;
      
 PImage bug;
 PImage bgrnd;
-Student stew[] = new Student[agents];
+Bug stew[] = new Bug[agents];
 Lights lit;
 Vec2 lightPos = new Vec2(100,100);
 void setup() {
    size(1200, 900);
-   surface.setTitle("School's Out!");
+   surface.setTitle("Bugs!");
    bgrnd = loadImage("background1.png");
    bgrnd.resize(width,height);
    bug = loadImage("bug.png");
+   bug=loadImage("bug.png");
 
    for (int i = 0; i < agents; i++){
      m = (minMass + random(maxMass));
@@ -51,7 +57,7 @@ void setup() {
      vel= new Vec2(5+(random(20)), (0-random(15)+5));
      acc = new Vec2(1, 1);
      
-     stew[i] = new Student(pos, vel, acc, m);
+     stew[i] = new Bug(pos, vel, acc, m);
      
    }
    lit = new Lights(lightPos, 100.0, 100.0, 10);
@@ -60,12 +66,18 @@ void setup() {
 void draw() {
    background(bgrnd);
    mousePred();
-   noStroke();
+   noStroke();  
+   
    if (light) {lightOn();}
    for (int i = 0; i < agents; i++){
      if (stew[i] == null) {continue;}
-     
-     stew[i].renderCirc(bug);
+     float dxx = (stew[i].position.x + stew[i].velocity.normalized().x) - stew[i].position.x;
+     float dyy = (stew[i].position.y + stew[i].velocity.normalized().y) - stew[i].position.y;
+    angle1 = atan2(dyy, dxx);
+    x = (stew[i].position.x + stew[i].velocity.normalized().x) - (cos(angle1) * segLength) -.1;
+    y = (stew[i].position.y + stew[i].velocity.normalized().y) - (sin(angle1) * segLength) -.1;
+     //stew[i].renderCirc(bug);
+     segment(x, y, angle1, stew[i]);
      
    }
 
@@ -86,16 +98,6 @@ void draw() {
       stew[i].velocity = stew[i].velocity.plus(posDif.times(4/dist));
     }
     }
-    
-     float angle = atan2(stew[i].velocity.y,stew[i].velocity.x);
-     //circle(position.x, position.y, radius+mass*2);
-     //pushMatrix();
-     //imageMode(CENTER);
-     //translate(stew[i].position.x, stew[i].position.y);
-     //rotate(angle);
-     //stew[i].renderCirc(bug);
-     ////image(bug, stew[i].position.x, stew[i].position.y, 5+radius*stew[i].mass, 5+radius*stew[i].mass);
-     //popMatrix();
     
     stew[i].updatePosVel();
     int neighborsVisited = 0;
@@ -166,17 +168,9 @@ void draw() {
            velCount ++;
          }
      }
-         //
-         // light response
-         //
+
          if (stew[i] == null){continue;}
-         //if (lit.lightBugCollide(stew[i])) {
-           
-         //  if (lit.checkSide(stew[i]) < 2) {
-         //    stew[i].velocity.x *= -1.0;
-             
-         //  }
-         //}
+
          
      avgVel.mul(1.0/(float)velCount);
      if (velCount > 0) {
@@ -194,6 +188,15 @@ void draw() {
      }
      // keep balls within bounds using boundaryCheck()
      stew[i].boundaryCheck();
+     
+     float dx = stew[i].velocity.x - stew[i].position.x;
+     float dy = stew[i].velocity.y - stew[i].position.y;
+     float angle1 = atan2(dy, dx);
+     pushMatrix();
+     imageMode(CENTER);
+     translate(stew[i].position.x, stew[i].position.y);
+     rotate(angle1);
+     popMatrix();
   }
 }
 
@@ -252,6 +255,17 @@ void mousePred() {
       }
     }
   }
+}
+
+void segment(float x, float y, float a, Bug stew) {
+  pushMatrix();
+  translate(x, y);
+  imageMode(CENTER);
+  rotate(a);
+  image(  bug, -(5+radius*stew.mass/2), -(5+radius*stew.mass/2), 5+radius*stew.mass, 5+radius*stew.mass);
+  
+  //line(0, 0, segLength, 0);
+  popMatrix();
 }
 
 void lightOn() {

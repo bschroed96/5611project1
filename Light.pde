@@ -24,7 +24,7 @@ public class Lights {
     rect(pos.x, pos.y, wid, hgt);
   }
   
-  public boolean lightBugCollide(Student stew) {
+  public boolean lightBugCollide(Bug stew) {
     float xDist = abs(stew.position.x - pos.x-(.5*wid));
     float yDist = abs(stew.position.y - pos.y-(.5*hgt));
     if (xDist > (wid/2 + rad)) {return false;}
@@ -36,7 +36,7 @@ public class Lights {
     return (cDist <= (rad*rad + 2*stew.mass));
   }
   
-  public int checkSide(Student stew) {
+  public int checkSide(Bug stew) {
     if (stew.position.x >= pos.x+wid) {
       return 0;
     }
