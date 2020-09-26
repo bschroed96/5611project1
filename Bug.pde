@@ -1,15 +1,15 @@
-// Student class for project1
-// each student has unique attributes
+// Bug class for project1
+// each Bug has unique attributes
 // some attributes can be changed by the user
-// attributes affect how the student interacts with other students
+// attributes affect how the Bug interacts with other Bugs
 // this has poor style, as all member variables are public...
 
-public class Student {
+public class Bug {
    public Vec2 position, velocity, acceleration;
    public float mass;
    public float rgb[];
    
-   public Student() {
+   public Bug() {
      rgb = new float[3];
      position = new Vec2(100,100);
      rgb[0] = 255;
@@ -17,7 +17,7 @@ public class Student {
      rgb[2] = 255;
    }
    
-   public Student(Vec2 position, Vec2 velocity, Vec2 acceleration, float mass){
+   public Bug(Vec2 position, Vec2 velocity, Vec2 acceleration, float mass){
       rgb = new float[3];
       this.position = position;
       this.velocity = velocity;
@@ -40,7 +40,7 @@ public class Student {
      //popMatrix();
    }
    
-   public Vec2 collide (Student stew2) {
+   public Vec2 collide (Bug stew2) {
      float mSum = mass + stew2.mass;
      float m1 = 2*stew2.mass/mSum;
      Vec2 p1mp2 = position.minus(stew2.position).normalized();
@@ -73,7 +73,7 @@ public class Student {
      }
    }
    
-   public void separate(Student stew2) {
+   public void separate(Bug stew2) {
       Vec2 sep = position.minus(stew2.position).normalized();
       sep.setToLength(stew2.mass);
       acceleration = acceleration.plus(sep.times(mass));
@@ -93,7 +93,7 @@ public class Student {
      }
    }
    
-   public Vec2 findNearest(Student stew, float neighborDist, Vec2 avgPos) {
+   public Vec2 findNearest(Bug stew, float neighborDist, Vec2 avgPos) {
      if (position.distanceTo(stew.position) <= neighborDist) {
        return stew.position;
      }

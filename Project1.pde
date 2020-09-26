@@ -1,4 +1,4 @@
-//"School's out"
+//"Bugz"
 //CSCI 5611 Project 1
 // Ben Schroeder
 int counter = 0;
@@ -35,7 +35,7 @@ Vec2 orient;
      
 PImage bug;
 PImage bgrnd;
-Student stew[] = new Student[agents];
+Bug stew[] = new Bug[agents];
 Lights lit;
 Vec2 lightPos = new Vec2(100,100);
 void setup() {
@@ -51,7 +51,7 @@ void setup() {
      vel= new Vec2(5+(random(20)), (0-random(15)+5));
      acc = new Vec2(1, 1);
      
-     stew[i] = new Student(pos, vel, acc, m);
+     stew[i] = new Bug(pos, vel, acc, m);
      
    }
    lit = new Lights(lightPos, 100.0, 100.0, 10);
